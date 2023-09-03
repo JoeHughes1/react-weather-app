@@ -16,7 +16,7 @@ function App() {
   const handleClick = async () => {
     try {
       const data = await( await fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`)).json()
-      setData(data)
+      setData(data);
 
       setTemperature(data.current.temp_f);
       setCurrentCondition(data.current.condition);
@@ -26,6 +26,7 @@ function App() {
       console.log(temperature, currentCondition, humidity);
     } catch (err){
       console.error(err);
+      alert(`${city} not found`);
     }
   }
 
@@ -33,14 +34,21 @@ function App() {
 
   return (
     <div className='weather__container'>
-      <input className='city-input' required='required' placeholder='enter a city' value={city} onChange={e => setCity(e.target.value)} />
-      <button type='submit' onClick={handleClick} >Search</button>
+      <div className='weather__search-bar'>
+        <input className='city-input' required='required' placeholder='enter a city' value={city} onChange={e => setCity(e.target.value)} />
+        <button type='submit' onClick={handleClick} >Search</button>
+      </div>
+
 
       <h1 className='weather__city'>{cityDisplay}</h1>
-      <p className='stats weather__temp'>Temperature: {temperature ? temperature : '--'} F</p>
-      <p className='stats weather__condition'>{currentCondition ? currentCondition.text : '--'}</p>
-      <img src={currentCondition ? currentCondition.icon : null} className='condition-icon'></img>
-      <p className='stats weather__humidity'>Humidity: {humidity ? humidity : '--'}</p>
+      <p className='stats weather__temp'>{temperature ? temperature : '--'} F</p>
+
+      <div className='condition__container'>
+        <p className='stats weather__condition'>{currentCondition ? currentCondition.text : '--'}</p>
+        <img src={currentCondition ? currentCondition.icon : null} className='condition-icon'></img>
+      </div>
+
+      <p className='stats weather__humidity'>Humidity: {humidity ? humidity : '--'}%</p>
     </div>
   );
 }
